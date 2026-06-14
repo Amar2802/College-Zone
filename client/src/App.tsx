@@ -15,7 +15,7 @@ import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 const App = () => (
   <GoogleOAuthProvider clientId={googleClientId}>
