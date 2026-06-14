@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 const features = [
   { icon: Search, title: "Smart Matching", desc: "AI-powered compatibility scoring based on your habits and preferences" },
   { icon: MessageCircle, title: "Real-time Chat", desc: "Instant messaging with your matches and college community groups" },
-  { icon: Shield, title: "Safe & Verified", desc: "College email verification keeps the community authentic and secure" },
+  { icon: Shield, title: "Safe & Verified", desc: "Student email verification keeps the community authentic and secure" },
   { icon: Users, title: "Community", desc: "Join college-wide groups, find study buddies, and build friendships" },
 ];
 
