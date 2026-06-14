@@ -19,6 +19,7 @@ const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
 
 const App = () => (
   <GoogleOAuthProvider clientId={googleClientId}>
+    {/* @ts-ignore */}
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>

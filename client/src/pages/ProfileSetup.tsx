@@ -107,6 +107,7 @@ const ProfileSetup = () => {
         </div>
 
         <div className="bg-card rounded-2xl p-8 shadow-card">
+          {/* @ts-ignore */}
           <AnimatePresence mode="wait">
             {step === 0 && (
               <motion.div key="step0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
