@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight, ArrowLeft, Check, GraduationCap, Moon, Droplets, BookOpen, Wine } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
 
 const steps = ["Basic Info", "Preferences", "Lifestyle"];
 
@@ -22,7 +22,7 @@ const preferences: Pref[] = [
 const ProfileSetup = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, loading: authLoading } = useAuth();
+  const { user, updateUser, loading: authLoading } = useAuth();
   const [step, setStep] = useState(0);
   const [info, setInfo] = useState({ college: "", course: "", year: "" });
   const [prefs, setPrefs] = useState<Record<string, string>>({});
@@ -31,6 +31,22 @@ const ProfileSetup = () => {
   useEffect(() => {
     if (!authLoading && !user) navigate("/login");
   }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (user && user.profile) {
+      setInfo({
+        college: user.profile.college || "",
+        course: user.profile.course || "",
+        year: user.profile.year || "",
+      });
+      setPrefs({
+        sleep_schedule: user.profile.sleep_schedule || "",
+        cleanliness: user.profile.cleanliness || "",
+        study_habits: user.profile.study_habits || "",
+        smoking_drinking: user.profile.smoking_drinking || "",
+      });
+    }
+  }, [user]);
 
   const selectPref = (field: string, option: string) => {
     setPrefs(p => ({ ...p, [field]: option }));
@@ -45,9 +61,8 @@ const ProfileSetup = () => {
       setStep(s => s + 1);
     } else {
       setSaving(true);
-      const { error } = await supabase
-        .from("profiles")
-        .update({
+      try {
+        const updatedUser = await api.put("/api/users/profile", {
           college: info.college,
           course: info.course,
           year: info.year,
@@ -55,15 +70,15 @@ const ProfileSetup = () => {
           cleanliness: prefs.cleanliness || "",
           study_habits: prefs.study_habits || "",
           smoking_drinking: prefs.smoking_drinking || "",
-        })
-        .eq("user_id", user!.id);
-      setSaving(false);
-      if (error) {
-        toast({ title: "Error saving profile", variant: "destructive" });
-        return;
+        });
+        updateUser(updatedUser);
+        setSaving(false);
+        toast({ title: "Profile complete! Welcome to College Zone 🎉" });
+        navigate("/dashboard");
+      } catch (error: any) {
+        setSaving(false);
+        toast({ title: error.message || "Error saving profile", variant: "destructive" });
       }
-      toast({ title: "Profile complete! Welcome to College Zone 🎉" });
-      navigate("/dashboard");
     }
   };
 

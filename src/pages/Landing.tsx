@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Users, MessageCircle, Search, Shield, Sparkles, ArrowRight } from "lucide-react";
+import { Users, MessageCircle, Search, Shield, Sparkles, ArrowRight, Sun, Moon } from "lucide-react";
 import heroImage from "@/assets/hero-illustration.png";
+import { useTheme } from "next-themes";
 
 const features = [
   { icon: Search, title: "Smart Matching", desc: "AI-powered compatibility scoring based on your habits and preferences" },
@@ -13,6 +14,7 @@ const features = [
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,6 +28,15 @@ const Landing = () => {
             <span className="font-display text-xl font-bold text-foreground">College Zone</span>
           </div>
           <div className="flex items-center gap-3">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="mr-1 relative flex items-center justify-center"
+            >
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-amber-500" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-indigo-400" />
+            </Button>
             <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
             <Button variant="hero" size="sm" onClick={() => navigate("/signup")}>
               Get Started

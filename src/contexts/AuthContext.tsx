@@ -1,49 +1,103 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
+import { initiateSocketConnection, disconnectSocket } from "@/lib/socket";
+
+export type UserProfile = {
+  college?: string;
+  course?: string;
+  year?: string;
+  sleep_schedule?: string;
+  cleanliness?: string;
+  study_habits?: string;
+  smoking_drinking?: string;
+};
+
+export type AuthUser = {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  googleId?: string;
+  profile?: UserProfile;
+  createdAt?: string;
+  updatedAt?: string;
+};
 
 type AuthContextType = {
-  session: Session | null;
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
-  signOut: () => Promise<void>;
+  signIn: (token: string, user: AuthUser) => void;
+  signUp: (token: string, user: AuthUser) => void;
+  signOut: () => void;
+  updateUser: (updatedUser: AuthUser) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  session: null,
   user: null,
   loading: true,
-  signOut: async () => {},
+  signIn: () => {},
+  signUp: () => {},
+  signOut: () => {},
+  updateUser: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        setLoading(false);
-      }
-    );
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+  const fetchCurrentUser = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
       setLoading(false);
-    });
+      return;
+    }
+    
+    try {
+      const userData = await api.get("/api/users/me");
+      setUser(userData);
+      initiateSocketConnection(userData._id);
+    } catch (error) {
+      console.error("Failed to fetch current user:", error);
+      localStorage.removeItem("token");
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return () => subscription.unsubscribe();
+  useEffect(() => {
+    fetchCurrentUser();
+    return () => {
+      disconnectSocket();
+    };
   }, []);
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
+  const signIn = (token: string, userData: AuthUser) => {
+    localStorage.setItem("token", token);
+    setUser(userData);
+    initiateSocketConnection(userData._id);
+  };
+
+  const signUp = (token: string, userData: AuthUser) => {
+    localStorage.setItem("token", token);
+    setUser(userData);
+    initiateSocketConnection(userData._id);
+  };
+
+  const signOut = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    disconnectSocket();
+  };
+
+  const updateUser = (updatedUser: AuthUser) => {
+    setUser(updatedUser);
   };
 
   return (
-    <AuthContext.Provider value={{ session, user: session?.user ?? null, loading, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

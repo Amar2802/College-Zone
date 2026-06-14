@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Send, Paperclip, Smile, Check, CheckCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
+import { getSocket } from "@/lib/socket";
 
 type Msg = {
-  id: string;
+  _id: string;
   content: string;
-  sender_id: string;
-  receiver_id: string | null;
-  is_read: boolean;
-  created_at: string;
+  sender: string;
+  receiver: string;
+  isRead: boolean;
+  createdAt: string;
 };
 
 const Chat = () => {
@@ -34,11 +35,13 @@ const Chat = () => {
   // Load other user's name
   useEffect(() => {
     if (!receiverId) return;
-    supabase.from("profiles").select("full_name").eq("user_id", receiverId).single().then(({ data }) => {
-      if (data?.full_name) {
-        setOtherName(data.full_name);
-        setOtherInitials(data.full_name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2));
+    api.get(`/api/users/${receiverId}`).then((data) => {
+      if (data?.name) {
+        setOtherName(data.name);
+        setOtherInitials(data.name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2));
       }
+    }).catch((err) => {
+      console.error("Failed to load other user details:", err);
     });
   }, [receiverId]);
 
@@ -46,30 +49,33 @@ const Chat = () => {
   useEffect(() => {
     if (!user || !receiverId) return;
     const load = async () => {
-      const { data } = await supabase
-        .from("messages")
-        .select("*")
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${user.id})`)
-        .order("created_at", { ascending: true });
-      if (data) setMessages(data);
+      try {
+        const data = await api.get(`/api/messages/${receiverId}`);
+        setMessages(data);
+      } catch (err) {
+        console.error("Failed to load messages:", err);
+      }
     };
     load();
 
-    // Subscribe to new messages
-    const channel = supabase
-      .channel("messages")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, (payload) => {
-        const msg = payload.new as Msg;
+    const socket = getSocket();
+    if (socket) {
+      socket.on("receive_message", (msg: Msg) => {
         if (
-          (msg.sender_id === user.id && msg.receiver_id === receiverId) ||
-          (msg.sender_id === receiverId && msg.receiver_id === user.id)
+          (msg.sender === user._id && msg.receiver === receiverId) ||
+          (msg.sender === receiverId && msg.receiver === user._id)
         ) {
           setMessages(prev => [...prev, msg]);
         }
-      })
-      .subscribe();
+      });
+    }
 
-    return () => { supabase.removeChannel(channel); };
+    return () => {
+      const socket = getSocket();
+      if (socket) {
+        socket.off("receive_message");
+      }
+    };
   }, [user, receiverId]);
 
   useEffect(() => {
@@ -80,11 +86,15 @@ const Chat = () => {
     if (!input.trim() || !user || !receiverId) return;
     const content = input.trim();
     setInput("");
-    await supabase.from("messages").insert({
-      sender_id: user.id,
-      receiver_id: receiverId,
-      content,
-    });
+    try {
+      const newMsg = await api.post("/api/messages", {
+        receiverId,
+        content,
+      });
+      setMessages(prev => [...prev, newMsg]);
+    } catch (err) {
+      console.error("Failed to send message:", err);
+    }
   };
 
   const formatTime = (ts: string) => new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -116,18 +126,18 @@ const Chat = () => {
         )}
         {messages.map((m, i) => (
           <motion.div
-            key={m.id}
+            key={m._id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: Math.min(i * 0.03, 0.3) }}
-            className={`flex ${m.sender_id === user?.id ? "justify-end" : "justify-start"}`}
+            className={`flex ${m.sender === user?._id ? "justify-end" : "justify-start"}`}
           >
-            <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${m.sender_id === user?.id ? "bg-primary text-primary-foreground rounded-br-md" : "bg-card shadow-card text-card-foreground rounded-bl-md"}`}>
+            <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${m.sender === user?._id ? "bg-primary text-primary-foreground rounded-br-md" : "bg-card shadow-card text-card-foreground rounded-bl-md"}`}>
               <p className="text-sm leading-relaxed">{m.content}</p>
-              <div className={`flex items-center gap-1 mt-1 ${m.sender_id === user?.id ? "justify-end" : ""}`}>
-                <span className={`text-[10px] ${m.sender_id === user?.id ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{formatTime(m.created_at)}</span>
-                {m.sender_id === user?.id && (
-                  m.is_read ? <CheckCheck className="w-3 h-3 text-primary-foreground/60" /> : <Check className="w-3 h-3 text-primary-foreground/60" />
+              <div className={`flex items-center gap-1 mt-1 ${m.sender === user?._id ? "justify-end" : ""}`}>
+                <span className={`text-[10px] ${m.sender === user?._id ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{formatTime(m.createdAt)}</span>
+                {m.sender === user?._id && (
+                  m.isRead ? <CheckCheck className="w-3 h-3 text-primary-foreground/60" /> : <Check className="w-3 h-3 text-primary-foreground/60" />
                 )}
               </div>
             </div>

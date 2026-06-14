@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Sparkles, MessageCircle, Users, User, Search, Bell, Heart, X, LogOut } from "lucide-react";
+import { Sparkles, MessageCircle, Users, User, Search, Bell, Heart, X, LogOut, Sun, Moon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { api } from "@/lib/api";
+import { useTheme } from "next-themes";
 
 type Profile = {
   id: string;
@@ -49,6 +50,7 @@ type Tab = "matches" | "chats" | "profile";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { user, signOut, loading: authLoading } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [tab, setTab] = useState<Tab>("matches");
   const [search, setSearch] = useState("");
   const [myProfile, setMyProfile] = useState<Profile | null>(null);
@@ -62,13 +64,41 @@ const Dashboard = () => {
   useEffect(() => {
     if (!user) return;
     const load = async () => {
-      const { data: all } = await supabase.from("profiles").select("*");
-      if (all) {
-        const me = all.find(p => p.user_id === user.id) || null;
-        setMyProfile(me);
-        setProfiles(all.filter(p => p.user_id !== user.id));
+      try {
+        const allUsers = await api.get("/api/users");
+        const mappedProfiles: Profile[] = allUsers.map((u: any) => ({
+          id: u._id,
+          user_id: u._id,
+          full_name: u.name,
+          college: u.profile?.college || "",
+          course: u.profile?.course || "",
+          year: u.profile?.year || "",
+          sleep_schedule: u.profile?.sleep_schedule || null,
+          cleanliness: u.profile?.cleanliness || null,
+          study_habits: u.profile?.study_habits || null,
+          smoking_drinking: u.profile?.smoking_drinking || null,
+        }));
+
+        const meProfile: Profile = {
+          id: user._id,
+          user_id: user._id,
+          full_name: user.name,
+          college: user.profile?.college || "",
+          course: user.profile?.course || "",
+          year: user.profile?.year || "",
+          sleep_schedule: user.profile?.sleep_schedule || null,
+          cleanliness: user.profile?.cleanliness || null,
+          study_habits: user.profile?.study_habits || null,
+          smoking_drinking: user.profile?.smoking_drinking || null,
+        };
+
+        setMyProfile(meProfile);
+        setProfiles(mappedProfiles);
+      } catch (err) {
+        console.error("Error loading profiles:", err);
+      } finally {
+        setLoadingData(false);
       }
-      setLoadingData(false);
     };
     load();
   }, [user]);
@@ -115,10 +145,19 @@ const Dashboard = () => {
             <span className="font-display text-xl font-bold">College Zone</span>
           </div>
           <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="mr-1 relative flex items-center justify-center"
+            >
+              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-amber-500" />
+              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-indigo-400" />
+            </Button>
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="w-5 h-5" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={async () => { await signOut(); navigate("/"); }}>
+            <Button variant="ghost" size="icon" onClick={() => { signOut(); navigate("/"); }}>
               <LogOut className="w-5 h-5" />
             </Button>
           </div>
