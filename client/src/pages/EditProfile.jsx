@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -130,7 +129,7 @@ const EditProfile = () => {
     };
 
     loadProfile();
-  }, [user]);
+  }, [user, navigate, toast]);
 
   // Handle image updates (Profile/Cover)
   const handleImageMockUpload = async (type) => {

@@ -70,7 +70,7 @@ const Chat = () => {
     if (socket) {
       // Setup message listeners
       socket.on("receive_message", msg => {
-        if (msg.sender === user._id && msg.receiver === receiverId || msg.sender === receiverId && msg.receiver === user._id) {
+        if ((msg.sender === user._id && msg.receiver === receiverId) || (msg.sender === receiverId && msg.receiver === user._id)) {
           setMessages(prev => {
             const isDuplicate = prev.some(m => 
               m._id === msg._id || 

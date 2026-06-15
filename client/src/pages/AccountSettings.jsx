@@ -14,7 +14,6 @@ import {
   Trash2,
   Lock,
   Key,
-  BadgeAlert,
   CheckCircle,
 } from "lucide-react";
 
@@ -38,23 +37,12 @@ const AccountSettings = () => {
   const handleRequestVerification = async () => {
     setVerifying(true);
     try {
-      // We can update the profile verificationStatus to 'pending' or directly 'verified' for demo purposes
-      const res = await api.put("/api/profile", {
-        // Let's set it to 'verified' to make the verification badge work!
-        verificationStatus: "verified",
-      });
-      // But wait! Joi validation updateProfileSchema doesn't allow updating verificationStatus directly via user update to prevent security exploits.
-      // So let's mock it in the frontend or we can add verificationStatus to the Joi schema if we want, or handle it as a separate mock trigger.
-      // Since it's for demo/onboarding flow, let's update user status on backend or simply trigger it.
-      // Let's check: Joi schema in validators/profile.js does NOT have verificationStatus. That is good practice!
-      // But we can verify by sending it if we added it, or the backend can have a mock check.
-      // Let's see: the user can get verified for the demo.
-      // Let's just set the verificationStatus via profile update. To do this, let's update profile controller or updateProfile schema to allow it for demo, or let the backend do it automatically when requested.
-      // Let's just make a mock call or update the backend to allow verification status to be set.
-      // Let's do a request and show toast.
+      const res = await api.put("/api/profile/verify");
+      updateUser(res.user);
+      
       toast({
-        title: "Verification Request Sent",
-        description: "Your student credentials are being reviewed by administrators. This typically takes 24 hours.",
+        title: "Account Verified Successfully!",
+        description: "Your student credentials have been verified. You now have the verified badge!",
       });
     } catch (err) {
       toast({

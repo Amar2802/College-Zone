@@ -240,6 +240,29 @@ export const updatePrivacy = async (req, res, next) => {
   }
 };
 
+// @desc    Mock request student verification
+// @route   PUT /api/profile/verify
+// @access  Private
+export const verifyProfile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    user.verificationStatus = "verified";
+    await user.save();
+
+    res.json({
+      user,
+      message: "Student account verified successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Upload profile or cover image (supporting mock generation)
 // @route   POST /api/profile/image
 // @access  Private

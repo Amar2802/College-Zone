@@ -4,6 +4,7 @@ import {
   updateProfile,
   updatePreferences,
   updatePrivacy,
+  verifyProfile,
   uploadImage,
   deleteAccount,
 } from "../controllers/profile.js";
@@ -24,6 +25,7 @@ router.get("/", getProfile);
 router.put("/", validate(updateProfileSchema), updateProfile);
 router.put("/preferences", validate(updatePreferencesSchema), updatePreferences);
 router.put("/privacy", validate(updatePrivacySchema), updatePrivacy);
+router.put("/verify", verifyProfile);
 router.post("/image", uploadImage);
 router.delete("/", deleteAccount);
 

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/services/api";
 import { useTheme } from "next-themes";
-const prefFields = ["sleep_schedule", "cleanliness", "study_habits", "smoking_drinking"];
+
 function calcMatch(me, other) {
   let score = 0;
   let total = 0;

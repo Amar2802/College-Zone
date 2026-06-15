@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,11 +19,9 @@ import {
   Heart,
   Calendar,
   DollarSign,
-  Award,
   Sparkles,
   ArrowLeft,
   CheckCircle2,
-  Lock,
   Loader2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -91,7 +88,7 @@ const Profile = () => {
     if (currentUser) {
       fetchProfile();
     }
-  }, [viewId, currentUser, isOwnProfile]);
+  }, [viewId, currentUser, isOwnProfile, toast, updateUser]);
 
   if (loading) {
     return (
