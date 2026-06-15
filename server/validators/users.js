@@ -1,15 +1,23 @@
-import { z } from "zod";
+import Joi from "joi";
 
-export const updateProfileSchema = z.object({
-  body: z.object({
-    name: z.string().min(2, "Name must be at least 2 characters long").optional(),
-    phone: z.string().optional(),
-    college: z.string().optional(),
-    course: z.string().optional(),
-    year: z.string().optional(),
-    sleep_schedule: z.enum(["", "Early Bird", "Night Owl", "Flexible"]).optional(),
-    cleanliness: z.enum(["", "Very Clean", "Moderate", "Relaxed"]).optional(),
-    study_habits: z.enum(["", "Quiet", "Group Study", "Flexible"]).optional(),
-    smoking_drinking: z.enum(["", "Non-smoker/Non-drinker", "Social", "Regular"]).optional(),
+export const updateProfileSchema = Joi.object({
+  body: Joi.object({
+    name: Joi.string().min(2).optional(),
+    phone: Joi.string().allow("").optional(),
+    college: Joi.string().allow("").optional(),
+    course: Joi.string().allow("").optional(),
+    year: Joi.string().allow("").optional(),
+    sleep_schedule: Joi.string()
+      .valid("", "Early Bird", "Night Owl", "Flexible")
+      .optional(),
+    cleanliness: Joi.string()
+      .valid("", "Very Clean", "Moderate", "Relaxed")
+      .optional(),
+    study_habits: Joi.string()
+      .valid("", "Quiet", "Group Study", "Flexible")
+      .optional(),
+    smoking_drinking: Joi.string()
+      .valid("", "Non-smoker/Non-drinker", "Social", "Regular")
+      .optional(),
   }),
 });

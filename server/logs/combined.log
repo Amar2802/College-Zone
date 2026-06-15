@@ -74,3 +74,33 @@ Stack: TypeError: Cannot read properties of undefined (reading 'map')
 [2026-06-15 19:59:35:5935] [INFO]: MongoDB Connected: 127.0.0.1
 [2026-06-15 19:59:35:5935] [INFO]: User registered: test@student.edu
 [2026-06-15 19:59:36:5936] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:02:05:25] [INFO]: Server running in development mode on port 5000
+[2026-06-15 20:02:05:25] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:02:52:252] [INFO]: Socket connected: c_s3pVcXxutC1ntnAAAB
+[2026-06-15 20:02:52:252] [INFO]: User 6a2ea7de38cbbcee3f930bac joined room and mapped to socket c_s3pVcXxutC1ntnAAAB
+[2026-06-15 20:07:24:724] [INFO]: Server running in development mode on port 5000
+[2026-06-15 20:07:24:724] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:07:27:727] [INFO]: Socket connected: u0FVuP3ZiWQZd50uAAAB
+[2026-06-15 20:07:31:731] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:07:31:731] [ERROR]: 400 - Invalid user data - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: Error: Invalid user data
+    at signup (E:\CZ\College Zone\server\controllers\auth.js:44:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-06-15 20:07:31:731] [ERROR]: 400 - Invalid user data - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: Error: Invalid user data
+    at signup (E:\CZ\College Zone\server\controllers\auth.js:44:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-06-15 20:07:31:731] [INFO]: User registered: test@student.edu
+[2026-06-15 20:07:32:732] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:07:41:741] [INFO]: Server running in development mode on port 5000
+[2026-06-15 20:07:41:741] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:07:41:741] [INFO]: Socket connected: D1TopEfbLdj9R8NLAAAB
+[2026-06-15 20:07:47:747] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:07:47:747] [INFO]: User registered: test@student.edu
+[2026-06-15 20:07:49:749] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:09:05:95] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:09:05:95] [INFO]: User registered: test@student.edu
+[2026-06-15 20:09:07:97] [INFO]: Socket disconnected: D1TopEfbLdj9R8NLAAAB
+[2026-06-15 20:09:31:931] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 20:09:31:931] [INFO]: User registered: test@student.edu
+[2026-06-15 20:09:32:932] [INFO]: MongoDB Connected: 127.0.0.1

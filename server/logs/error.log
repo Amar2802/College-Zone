@@ -38,3 +38,11 @@ Stack: TypeError: Cannot read properties of undefined (reading 'map')
     at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
     at processTicksAndRejections (node:internal/process/task_queues:104:5)
     at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 20:07:31:731] [ERROR]: 400 - Invalid user data - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: Error: Invalid user data
+    at signup (E:\CZ\College Zone\server\controllers\auth.js:44:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-06-15 20:07:31:731] [ERROR]: 400 - Invalid user data - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: Error: Invalid user data
+    at signup (E:\CZ\College Zone\server\controllers\auth.js:44:13)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)

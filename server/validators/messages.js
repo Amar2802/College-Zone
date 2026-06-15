@@ -1,11 +1,14 @@
-import { z } from "zod";
+import Joi from "joi";
 
-export const sendMessageSchema = z.object({
-  body: z.object({
-    receiverId: z.string({
-      required_error: "Receiver ID is required",
-    }).min(1, "Receiver ID cannot be empty"),
-    content: z.string().optional().default(""),
-    imageUrl: z.string().url("Invalid image URL format").optional().or(z.literal("")),
+export const sendMessageSchema = Joi.object({
+  body: Joi.object({
+    receiverId: Joi.string()
+      .min(1)
+      .required()
+      .messages({
+        "string.empty": "Receiver ID is required",
+      }),
+    content: Joi.string().allow("").optional().default(""),
+    imageUrl: Joi.string().uri().allow("").optional(),
   }),
 });
