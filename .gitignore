@@ -8,6 +8,8 @@ node_modules/
 # client builds
 client/build/
 client/node_modules/
+dist/
 
 # server builds/modules
 server/node_modules/
+server/dist/

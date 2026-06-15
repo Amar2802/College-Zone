@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Send, Paperclip, Smile, Check, CheckCheck, Loader2 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
-import { api } from "@/lib/api";
-import { getSocket } from "@/lib/socket";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/services/api";
+import { getSocket } from "@/utils/socket";
 
 type Msg = {
   _id: string;
@@ -86,7 +86,10 @@ const Chat = () => {
           (msg.sender === user._id && msg.receiver === receiverId) ||
           (msg.sender === receiverId && msg.receiver === user._id)
         ) {
-          setMessages(prev => [...prev, msg]);
+          setMessages(prev => {
+            if (prev.some(m => m._id === msg._id)) return prev;
+            return [...prev, msg];
+          });
           if (msg.sender === receiverId) {
             markAsRead();
           }
@@ -150,7 +153,10 @@ const Chat = () => {
         receiverId,
         content,
       });
-      setMessages(prev => [...prev, newMsg]);
+      setMessages(prev => {
+        if (prev.some(m => m._id === newMsg._id)) return prev;
+        return [...prev, newMsg];
+      });
     } catch (err) {
       console.error("Failed to send message:", err);
     }
@@ -194,7 +200,10 @@ const Chat = () => {
           content: "Sent an image",
           imageUrl: data.imageUrl,
         });
-        setMessages(prev => [...prev, newMsg]);
+        setMessages(prev => {
+          if (prev.some(m => m._id === newMsg._id)) return prev;
+          return [...prev, newMsg];
+        });
       }
     } catch (err) {
       console.error("Failed to upload image:", err);

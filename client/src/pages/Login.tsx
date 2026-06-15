@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, Mail, Lock, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { api } from "@/lib/api";
-import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {

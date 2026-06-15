@@ -25,8 +25,8 @@ import {
   Loader2
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/contexts/AuthContext";
-import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/services/api";
 import { useTheme } from "next-themes";
 
 type Profile = {

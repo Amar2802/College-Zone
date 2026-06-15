@@ -3,7 +3,11 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
+import helmet from "helmet";
+import connectDB from "./utils/db.js";
+import logger from "./utils/logger.js";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
+import { authLimiter, apiLimiter } from "./middleware/rateLimiter.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import messageRoutes from "./routes/messages.js";
@@ -11,61 +15,76 @@ import eventRoutes from "./routes/events.js";
 
 dotenv.config();
 
+// Connect to MongoDB database
 connectDB();
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+// Security Headers middleware
+app.use(helmet());
+
+// CORS configuration
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:3000",
+  "http://localhost:5173",
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
+// Socket.io integration
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
 
 const userSockets = {};
 
 io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
+  logger.info(`Socket connected: ${socket.id}`);
 
   socket.on("setup", (userId) => {
     socket.join(userId);
     userSockets[userId] = socket.id;
-    console.log(`User ${userId} mapped to socket ${socket.id}`);
+    logger.info(`User ${userId} joined room and mapped to socket ${socket.id}`);
     socket.emit("connected");
   });
 
   socket.on("typing", (data) => {
     const { senderId, receiverId } = data;
-    const receiverSocketId = userSockets[receiverId];
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("typing", { senderId });
-    }
+    io.to(receiverId).emit("typing", { senderId });
   });
 
   socket.on("stop_typing", (data) => {
     const { senderId, receiverId } = data;
-    const receiverSocketId = userSockets[receiverId];
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("stop_typing", { senderId });
-    }
+    io.to(receiverId).emit("stop_typing", { senderId });
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+    logger.info(`Socket disconnected: ${socket.id}`);
     Object.keys(userSockets).forEach((userId) => {
       if (userSockets[userId] === socket.id) {
         delete userSockets[userId];
-        console.log(`Removed mapping for User ${userId}`);
+        logger.info(`Removed socket mapping for user ${userId}`);
       }
     });
   });
@@ -74,25 +93,38 @@ io.on("connection", (socket) => {
 app.set("io", io);
 app.set("userSockets", userSockets);
 
+// Root default route
 app.get("/", (req, res) => {
   res.send("College Zone API is running...");
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/events", eventRoutes);
-
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode).json({
-    message: err.message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
   });
 });
 
+// API Routes with rate limiters
+app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/users", apiLimiter, userRoutes);
+app.use("/api/messages", apiLimiter, messageRoutes);
+app.use("/api/events", apiLimiter, eventRoutes);
+
+// Error Handling Middlewares
+app.use(notFound);
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  server.listen(PORT, () => {
+    logger.info(`Server running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`);
+  });
+}
+
+// Export server for integration testing
+export { app, server };
+export default server;

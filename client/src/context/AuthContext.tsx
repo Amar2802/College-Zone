@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { api } from "@/lib/api";
-import { initiateSocketConnection, disconnectSocket } from "@/lib/socket";
+import { api } from "@/services/api";
+import { initiateSocketConnection, disconnectSocket } from "@/utils/socket";
 
 export type UserProfile = {
   college?: string;

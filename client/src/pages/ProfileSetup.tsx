@@ -6,8 +6,8 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { Sparkles, ArrowRight, ArrowLeft, Check, GraduationCap, Moon, Droplets, BookOpen, Wine } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
-import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/services/api";
 
 const steps = ["Basic Info", "Preferences", "Lifestyle"];
 

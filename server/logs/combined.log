@@ -1,0 +1,76 @@
+[2026-06-15 19:51:35:5135] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:51:35:5135] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:53:32:5332] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:53:32:5332] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:54:58:5458] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:54:58:5458] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:02:552] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:02:552] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:05:555] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:05:555] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:25:5525] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:25:5525] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:29:5529] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:29:5529] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:43:5543] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:43:5543] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:48:5548] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:48:5548] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:51:5551] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:51:5551] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:55:55:5555] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:55:55:5555] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:01:561] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:02:562] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:02:562] [ERROR]: 500 - Cannot read properties of undefined (reading 'map') - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: TypeError: Cannot read properties of undefined (reading 'map')
+    at E:\CZ\College Zone\server\middleware\validate.js:13:44
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (E:\CZ\College Zone\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 19:56:02:562] [ERROR]: 500 - Cannot read properties of undefined (reading 'map') - POST /api/auth/signup - IP: ::ffff:127.0.0.1 
+Stack: TypeError: Cannot read properties of undefined (reading 'map')
+    at E:\CZ\College Zone\server\middleware\validate.js:13:44
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (E:\CZ\College Zone\server\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 19:56:09:569] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:56:09:569] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:13:5613] [INFO]: Server running in development mode on port 5000
+[2026-06-15 19:56:13:5613] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:20:5620] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:56:20:5620] [INFO]: User registered: test@student.edu
+[2026-06-15 19:56:21:5621] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:59:08:598] [INFO]: Server running in development mode on port 5050
+[2026-06-15 19:59:08:598] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:59:35:5935] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 19:59:35:5935] [INFO]: User registered: test@student.edu
+[2026-06-15 19:59:36:5936] [INFO]: MongoDB Connected: 127.0.0.1
