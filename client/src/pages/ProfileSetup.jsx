@@ -186,11 +186,11 @@ const ProfileSetup = () => {
                       <Label className="text-base">{p.label}</Label>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {p.options.map(o => <button key={o} onClick={() => selectPref(p.field, o)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${prefs[p.field] === o ? "bg-primary text-primary-foreground shadow-card" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}>
+                      {p.options.map(o => <button key={o} type="button" onClick={() => selectPref(p.field, o)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${prefs[p.field] === o ? "bg-primary text-primary-foreground shadow-card" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}>
                           {o}
                         </button>)}
-                    </div>
-                  </div>)}
+                  </div>
+                </div>)}
               </motion.div>}
             {step === 2 && <motion.div key="step2" initial={{
             opacity: 0,
@@ -209,19 +209,19 @@ const ProfileSetup = () => {
                       <Label className="text-base">{p.label}</Label>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {p.options.map(o => <button key={o} onClick={() => selectPref(p.field, o)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${prefs[p.field] === o ? "bg-primary text-primary-foreground shadow-card" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}>
+                      {p.options.map(o => <button key={o} type="button" onClick={() => selectPref(p.field, o)} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${prefs[p.field] === o ? "bg-primary text-primary-foreground shadow-card" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}>
                           {o}
                         </button>)}
-                    </div>
-                  </div>)}
+                  </div>
+                </div>)}
               </motion.div>}
           </AnimatePresence>
 
           <div className="flex justify-between mt-8">
-            <Button variant="ghost" onClick={() => step > 0 ? setStep(s => s - 1) : navigate("/")}>
+            <Button type="button" variant="ghost" onClick={() => step > 0 ? setStep(s => s - 1) : navigate("/")}>
               <ArrowLeft className="w-4 h-4 mr-1" /> Back
             </Button>
-            <Button variant="hero" onClick={next} disabled={saving}>
+            <Button type="button" variant="hero" onClick={next} disabled={saving}>
               {step < 2 ? "Next" : saving ? "Saving..." : "Complete"} <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </div>

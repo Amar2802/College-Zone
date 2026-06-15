@@ -64,6 +64,8 @@ export const login = async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        profile: user.profile || {},
+        profileCompleted: user.profileCompleted,
         token: generateToken(user._id),
       });
     } else {
@@ -151,6 +153,7 @@ export const googleLogin = async (req, res, next) => {
       email: user.email,
       phone: user.phone || "",
       profile: user.profile || {},
+      profileCompleted: user.profileCompleted,
       token: generateToken(user._id),
     });
   } catch (error) {

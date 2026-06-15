@@ -27,8 +27,12 @@ export const AuthProvider = ({
       initiateSocketConnection(userData._id);
     } catch (error) {
       console.error("Failed to fetch current user:", error);
-      localStorage.removeItem("token");
-      setUser(null);
+      // Only clear auth state if the token we checked is still the active one.
+      // This avoids a stale startup request wiping out a fresh login.
+      if (localStorage.getItem("token") === token) {
+        localStorage.removeItem("token");
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }
