@@ -85,19 +85,23 @@ const ProfileSetup = () => {
     } else {
       setSaving(true);
       try {
-        const updatedUser = await api.put("/api/users/profile", {
+        await api.put("/api/profile", {
           college: info.college,
           course: info.course,
           year: info.year,
-          sleep_schedule: prefs.sleep_schedule || "",
-          cleanliness: prefs.cleanliness || "",
-          study_habits: prefs.study_habits || "",
-          smoking_drinking: prefs.smoking_drinking || ""
         });
-        updateUser(updatedUser);
+
+        const prefRes = await api.put("/api/profile/preferences", {
+          sleepSchedule: prefs.sleep_schedule || "",
+          cleanlinessLevel: prefs.cleanliness || "",
+          studyHabits: prefs.study_habits || "",
+          smokingPreference: prefs.smoking_drinking || "",
+        });
+
+        updateUser(prefRes.user);
         setSaving(false);
         toast({
-          title: "Profile complete! Welcome to College Zone 🎉"
+          title: "Profile complete! Welcome to College Zone 🎉",
         });
         navigate("/dashboard");
       } catch (error) {

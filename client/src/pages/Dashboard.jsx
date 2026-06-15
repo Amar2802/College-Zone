@@ -11,15 +11,37 @@ const prefFields = ["sleep_schedule", "cleanliness", "study_habits", "smoking_dr
 function calcMatch(me, other) {
   let score = 0;
   let total = 0;
-  for (const f of prefFields) {
+  
+  // Core matching fields
+  const fields = [
+    "sleep_schedule",
+    "cleanliness",
+    "study_habits",
+    "smoking_drinking",
+    "budgetRange",
+    "preferredLocation",
+    "guestPolicy",
+    "petsPreference"
+  ];
+  
+  for (const f of fields) {
     if (me[f] && other[f]) {
       total++;
-      if (me[f] === other[f]) score++;
+      if (me[f].toString().toLowerCase() === other[f].toString().toLowerCase()) {
+        score++;
+      }
     }
   }
-  if (me.college && other.college && me.college.toLowerCase() === other.college.toLowerCase()) score += 1;
-  total += 1;
-  return total > 0 ? Math.round(score / total * 100) : 50;
+  
+  // College compatibility carries higher weight
+  if (me.college && other.college) {
+    total += 2;
+    if (me.college.toLowerCase() === other.college.toLowerCase()) {
+      score += 2;
+    }
+  }
+  
+  return total > 0 ? Math.round((score / total) * 100) : 50;
 }
 function calcStudyMatch(me, other) {
   let score = 30; // base score
@@ -70,7 +92,13 @@ const Dashboard = () => {
   const [eventError, setEventError] = useState("");
   const [submittingEvent, setSubmittingEvent] = useState(false);
   useEffect(() => {
-    if (!authLoading && !user) navigate("/login");
+    if (!authLoading) {
+      if (!user) {
+        navigate("/login");
+      } else if (!user.profileCompleted) {
+        navigate("/profile-setup");
+      }
+    }
   }, [user, authLoading, navigate]);
   useEffect(() => {
     if (!user) return;
@@ -87,10 +115,14 @@ const Dashboard = () => {
           college: u.profile?.college || "",
           course: u.profile?.course || "",
           year: u.profile?.year || "",
-          sleep_schedule: u.profile?.sleep_schedule || null,
-          cleanliness: u.profile?.cleanliness || null,
-          study_habits: u.profile?.study_habits || null,
-          smoking_drinking: u.profile?.smoking_drinking || null
+          sleep_schedule: u.preferences?.sleepSchedule || u.profile?.sleep_schedule || null,
+          cleanliness: u.preferences?.cleanlinessLevel || u.profile?.cleanliness || null,
+          study_habits: u.preferences?.studyHabits || u.profile?.study_habits || null,
+          smoking_drinking: u.preferences?.smokingPreference ? `${u.preferences.smokingPreference}/${u.preferences.drinkingPreference || "Neither"}` : u.profile?.smoking_drinking || null,
+          budgetRange: u.preferences?.budgetRange || null,
+          preferredLocation: u.preferences?.preferredLocation || null,
+          guestPolicy: u.preferences?.guestPolicy || null,
+          petsPreference: u.preferences?.petsPreference || null
         }));
         const meProfile = {
           id: user._id,
@@ -99,10 +131,14 @@ const Dashboard = () => {
           college: user.profile?.college || "",
           course: user.profile?.course || "",
           year: user.profile?.year || "",
-          sleep_schedule: user.profile?.sleep_schedule || null,
-          cleanliness: user.profile?.cleanliness || null,
-          study_habits: user.profile?.study_habits || null,
-          smoking_drinking: user.profile?.smoking_drinking || null
+          sleep_schedule: user.preferences?.sleepSchedule || user.profile?.sleep_schedule || null,
+          cleanliness: user.preferences?.cleanlinessLevel || user.profile?.cleanliness || null,
+          study_habits: user.preferences?.studyHabits || user.profile?.study_habits || null,
+          smoking_drinking: user.preferences?.smokingPreference ? `${user.preferences.smokingPreference}/${user.preferences.drinkingPreference || "Neither"}` : user.profile?.smoking_drinking || null,
+          budgetRange: user.preferences?.budgetRange || null,
+          preferredLocation: user.preferences?.preferredLocation || null,
+          guestPolicy: user.preferences?.guestPolicy || null,
+          petsPreference: user.preferences?.petsPreference || null
         };
         setMyProfile(meProfile);
         setProfiles(mappedProfiles);
@@ -520,7 +556,7 @@ const Dashboard = () => {
               <h1 className="font-display text-2xl font-bold">{myProfile.full_name || "Your Name"}</h1>
               <p className="text-muted-foreground">{[myProfile.course, myProfile.year, myProfile.college].filter(Boolean).join(" • ") || "Preferences not set"}</p>
             </div>
-            <div className="bg-card rounded-2xl p-6 shadow-card space-y-4">
+            <div className="bg-card rounded-2xl p-6 shadow-card space-y-6">
               <h2 className="font-display font-bold text-lg">My Preferences</h2>
               <div className="grid grid-cols-2 gap-3">
                 {[{
@@ -540,9 +576,22 @@ const Dashboard = () => {
                     <p className="font-semibold text-sm">{p.value || "Not set"}</p>
                   </div>)}
               </div>
-              <Button variant="outline" className="w-full mt-4" onClick={() => navigate("/profile-setup")}>
-                Edit Profile
-              </Button>
+              <div className="space-y-2.5 pt-4 border-t border-border">
+                <Button className="w-full bg-gradient-primary text-primary-foreground" onClick={() => navigate("/profile")}>
+                  View Public Profile
+                </Button>
+                <div className="grid grid-cols-3 gap-2">
+                  <Button variant="outline" size="sm" onClick={() => navigate("/edit-profile")} className="text-xs">
+                    Edit Info
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => navigate("/account-settings")} className="text-xs">
+                    Account
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => navigate("/privacy-settings")} className="text-xs">
+                    Privacy
+                  </Button>
+                </div>
+              </div>
             </div>
           </motion.div>}
       </main>
@@ -623,7 +672,7 @@ const Dashboard = () => {
           key: "profile",
           icon: User,
           label: "Profile"
-        }].map(item => <button key={item.key} onClick={() => setTab(item.key)} className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${tab === item.key ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+        }].map(item => <button key={item.key} onClick={() => item.key === "profile" ? navigate("/profile") : setTab(item.key)} className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${tab === item.key ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
               <item.icon className="w-5 h-5" />
               <span className="text-xs font-medium">{item.label}</span>
             </button>)}

@@ -39,7 +39,7 @@ const Login = () => {
       toast({
         title: "Welcome back! 🎉"
       });
-      if (!data.profile?.college) {
+      if (!data.profileCompleted) {
         navigate("/profile-setup");
       } else {
         navigate("/dashboard");
@@ -63,7 +63,7 @@ const Login = () => {
       toast({
         title: "Welcome back! 🎉"
       });
-      if (!data.profile?.college) {
+      if (!data.profileCompleted) {
         navigate("/profile-setup");
       } else {
         navigate("/dashboard");

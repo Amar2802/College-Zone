@@ -72,7 +72,14 @@ const Chat = () => {
       socket.on("receive_message", msg => {
         if (msg.sender === user._id && msg.receiver === receiverId || msg.sender === receiverId && msg.receiver === user._id) {
           setMessages(prev => {
-            if (prev.some(m => m._id === msg._id)) return prev;
+            const isDuplicate = prev.some(m => 
+              m._id === msg._id || 
+              (m.content === msg.content && 
+               m.sender === msg.sender && 
+               m.receiver === msg.receiver && 
+               Math.abs(new Date(m.createdAt).getTime() - new Date(msg.createdAt).getTime()) < 5000)
+            );
+            if (isDuplicate) return prev;
             return [...prev, msg];
           });
           if (msg.sender === receiverId) {
@@ -140,7 +147,14 @@ const Chat = () => {
         content
       });
       setMessages(prev => {
-        if (prev.some(m => m._id === newMsg._id)) return prev;
+        const isDuplicate = prev.some(m => 
+          m._id === newMsg._id || 
+          (m.content === newMsg.content && 
+           m.sender === newMsg.sender && 
+           m.receiver === newMsg.receiver && 
+           Math.abs(new Date(m.createdAt).getTime() - new Date(newMsg.createdAt).getTime()) < 5000)
+        );
+        if (isDuplicate) return prev;
         return [...prev, newMsg];
       });
     } catch (err) {
@@ -186,7 +200,14 @@ const Chat = () => {
           imageUrl: data.imageUrl
         });
         setMessages(prev => {
-          if (prev.some(m => m._id === newMsg._id)) return prev;
+          const isDuplicate = prev.some(m => 
+            m._id === newMsg._id || 
+            (m.content === newMsg.content && 
+             m.sender === newMsg.sender && 
+             m.receiver === newMsg.receiver && 
+             Math.abs(new Date(m.createdAt).getTime() - new Date(newMsg.createdAt).getTime()) < 5000)
+          );
+          if (isDuplicate) return prev;
           return [...prev, newMsg];
         });
       }

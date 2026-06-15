@@ -13,6 +13,10 @@ import Signup from "./pages/Signup";
 import ProfileSetup from "./pages/ProfileSetup";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+import AccountSettings from "./pages/AccountSettings";
+import PrivacySettings from "./pages/PrivacySettings";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || "";
@@ -33,6 +37,10 @@ const App = () => <ErrorBoundary>
                   <Route path="/profile-setup" element={<ProfileSetup />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/chat" element={<Chat />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/edit-profile" element={<EditProfile />} />
+                  <Route path="/account-settings" element={<AccountSettings />} />
+                  <Route path="/privacy-settings" element={<PrivacySettings />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>

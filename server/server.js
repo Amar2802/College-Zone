@@ -12,6 +12,7 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import messageRoutes from "./routes/messages.js";
 import eventRoutes from "./routes/events.js";
+import profileRoutes from "./routes/profile.js";
 
 dotenv.config();
 
@@ -112,6 +113,7 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/users", apiLimiter, userRoutes);
 app.use("/api/messages", apiLimiter, messageRoutes);
 app.use("/api/events", apiLimiter, eventRoutes);
+app.use("/api/profile", apiLimiter, profileRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);

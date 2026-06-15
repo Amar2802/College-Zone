@@ -43,14 +43,15 @@ export const sendMessage = async (req, res, next) => {
     });
 
     const io = req.app.get("io");
+    const messageJSON = message.toJSON();
     if (io) {
       // Emit to receiver's room and sender's room for multi-device sync
-      io.to(receiverId.toString()).emit("receive_message", message);
-      io.to(senderId.toString()).emit("receive_message", message);
+      io.to(receiverId.toString()).emit("receive_message", messageJSON);
+      io.to(senderId.toString()).emit("receive_message", messageJSON);
       logger.info(`Message emitted via sockets from ${senderId} to ${receiverId}`);
     }
 
-    res.status(201).json(message);
+    res.status(201).json(messageJSON);
   } catch (error) {
     next(error);
   }

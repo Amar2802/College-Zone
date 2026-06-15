@@ -46,3 +46,98 @@ Stack: Error: Invalid user data
 Stack: Error: Invalid user data
     at signup (E:\CZ\College Zone\server\controllers\auth.js:44:13)
     at processTicksAndRejections (node:internal/process/task_queues:104:5)
+[2026-06-15 21:19:59:1959] [ERROR]: Token verification failed: User.findById(...).select is not a function
+[2026-06-15 21:19:59:1959] [ERROR]: 401 - Not authorized, token verification failed - PUT /api/profile - IP: ::ffff:127.0.0.1 
+Stack: Error: Not authorized, token verification failed
+    at protect (E:\CZ\College Zone\server\middleware\auth.js:27:19)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 21:19:59:1959] [ERROR]: Token verification failed: User.findById(...).select is not a function
+[2026-06-15 21:19:59:1959] [ERROR]: 401 - Not authorized, token verification failed - PUT /api/profile/preferences - IP: ::ffff:127.0.0.1 
+Stack: Error: Not authorized, token verification failed
+    at protect (E:\CZ\College Zone\server\middleware\auth.js:27:19)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 21:19:59:1959] [ERROR]: Token verification failed: User.findById(...).select is not a function
+[2026-06-15 21:19:59:1959] [ERROR]: 401 - Not authorized, token verification failed - PUT /api/profile/privacy - IP: ::ffff:127.0.0.1 
+Stack: Error: Not authorized, token verification failed
+    at protect (E:\CZ\College Zone\server\middleware\auth.js:27:19)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 21:19:59:1959] [ERROR]: Token verification failed: User.findById(...).select is not a function
+[2026-06-15 21:19:59:1959] [ERROR]: 401 - Not authorized, token verification failed - POST /api/profile/image - IP: ::ffff:127.0.0.1 
+Stack: Error: Not authorized, token verification failed
+    at protect (E:\CZ\College Zone\server\middleware\auth.js:27:19)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-15 21:19:59:1959] [ERROR]: Token verification failed: User.findById(...).select is not a function
+[2026-06-15 21:19:59:1959] [ERROR]: 401 - Not authorized, token verification failed - DELETE /api/profile - IP: ::ffff:127.0.0.1 
+Stack: Error: Not authorized, token verification failed
+    at protect (E:\CZ\College Zone\server\middleware\auth.js:27:19)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at router.handle (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:175:3)
+    at router (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:47:12)
+    at Layer.handle [as handle_request] (E:\CZ\College Zone\server\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:328:13)
+    at E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:286:9
+    at router.process_params (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:346:12)
+    at next (E:\CZ\College Zone\server\node_modules\express\lib\router\index.js:280:10)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
