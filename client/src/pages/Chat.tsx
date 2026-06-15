@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Send, Paperclip, Smile, Check, CheckCheck } from "lucide-react";
+import { ArrowLeft, Send, Paperclip, Smile, Check, CheckCheck, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
 import { getSocket } from "@/lib/socket";
@@ -14,6 +14,7 @@ type Msg = {
   sender: string;
   receiver: string;
   isRead: boolean;
+  imageUrl?: string;
   createdAt: string;
 };
 
@@ -26,7 +27,13 @@ const Chat = () => {
   const [input, setInput] = useState("");
   const [otherName, setOtherName] = useState("Chat");
   const [otherInitials, setOtherInitials] = useState("??");
+  const [isOtherTyping, setIsOtherTyping] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTypingRef = useRef(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/login");
@@ -45,13 +52,26 @@ const Chat = () => {
     });
   }, [receiverId]);
 
-  // Load messages
+  // Mark incoming messages as read
+  const markAsRead = useCallback(async () => {
+    if (!receiverId) return;
+    try {
+      await api.put(`/api/messages/read/${receiverId}`);
+    } catch (err) {
+      console.error("Failed to mark messages as read:", err);
+    }
+  }, [receiverId]);
+
+  // Load messages & setup socket listeners
   useEffect(() => {
     if (!user || !receiverId) return;
+    
     const load = async () => {
       try {
         const data = await api.get(`/api/messages/${receiverId}`);
         setMessages(data);
+        // Mark messages as read upon opening chat
+        await markAsRead();
       } catch (err) {
         console.error("Failed to load messages:", err);
       }
@@ -60,12 +80,38 @@ const Chat = () => {
 
     const socket = getSocket();
     if (socket) {
+      // Setup message listeners
       socket.on("receive_message", (msg: Msg) => {
         if (
           (msg.sender === user._id && msg.receiver === receiverId) ||
           (msg.sender === receiverId && msg.receiver === user._id)
         ) {
           setMessages(prev => [...prev, msg]);
+          if (msg.sender === receiverId) {
+            markAsRead();
+          }
+        }
+      });
+
+      // Setup typing listeners
+      socket.on("typing", (data: { senderId: string }) => {
+        if (data.senderId === receiverId) {
+          setIsOtherTyping(true);
+        }
+      });
+
+      socket.on("stop_typing", (data: { senderId: string }) => {
+        if (data.senderId === receiverId) {
+          setIsOtherTyping(false);
+        }
+      });
+
+      // Setup read receipt listener
+      socket.on("messages_read", (data: { readerId: string }) => {
+        if (data.readerId === receiverId) {
+          setMessages(prev =>
+            prev.map(m => (m.sender === user._id ? { ...m, isRead: true } : m))
+          );
         }
       });
     }
@@ -74,18 +120,31 @@ const Chat = () => {
       const socket = getSocket();
       if (socket) {
         socket.off("receive_message");
+        socket.off("typing");
+        socket.off("stop_typing");
+        socket.off("messages_read");
       }
+      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     };
-  }, [user, receiverId]);
+  }, [user, receiverId, markAsRead]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isOtherTyping]);
 
   const send = async () => {
     if (!input.trim() || !user || !receiverId) return;
     const content = input.trim();
     setInput("");
+    
+    // Stop typing indicator on send
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    const socket = getSocket();
+    if (socket && isTypingRef.current) {
+      socket.emit("stop_typing", { senderId: user._id, receiverId });
+      isTypingRef.current = false;
+    }
+
     try {
       const newMsg = await api.post("/api/messages", {
         receiverId,
@@ -94,6 +153,54 @@ const Chat = () => {
       setMessages(prev => [...prev, newMsg]);
     } catch (err) {
       console.error("Failed to send message:", err);
+    }
+  };
+
+  const handleInputChange = (val: string) => {
+    setInput(val);
+    if (!user || !receiverId) return;
+    const socket = getSocket();
+    if (!socket) return;
+
+    if (!isTypingRef.current) {
+      isTypingRef.current = true;
+      socket.emit("typing", { senderId: user._id, receiverId });
+    }
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stop_typing", { senderId: user._id, receiverId });
+      isTypingRef.current = false;
+    }, 2500);
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user || !receiverId) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+    setIsUploading(true);
+
+    try {
+      const data = await api.post("/api/messages/upload", formData);
+      if (data?.imageUrl) {
+        const newMsg = await api.post("/api/messages", {
+          receiverId,
+          content: "Sent an image",
+          imageUrl: data.imageUrl,
+        });
+        setMessages(prev => [...prev, newMsg]);
+      }
+    } catch (err) {
+      console.error("Failed to upload image:", err);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -113,7 +220,11 @@ const Chat = () => {
           </div>
           <div className="flex-1">
             <h2 className="font-display font-bold">{otherName}</h2>
-            <p className="text-xs text-success font-medium">Online</p>
+            {isOtherTyping ? (
+              <p className="text-xs text-primary font-medium animate-pulse">typing...</p>
+            ) : (
+              <p className="text-xs text-success font-medium">Online</p>
+            )}
           </div>
         </div>
       </header>
@@ -133,7 +244,19 @@ const Chat = () => {
             className={`flex ${m.sender === user?._id ? "justify-end" : "justify-start"}`}
           >
             <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${m.sender === user?._id ? "bg-primary text-primary-foreground rounded-br-md" : "bg-card shadow-card text-card-foreground rounded-bl-md"}`}>
-              <p className="text-sm leading-relaxed">{m.content}</p>
+              {m.imageUrl && (
+                <div className="relative rounded-lg overflow-hidden mb-2 max-w-sm border border-border/10 bg-black/5">
+                  <img
+                    src={m.imageUrl}
+                    alt="Attachment"
+                    className="max-h-60 w-full object-cover transition-transform hover:scale-105 duration-300"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              {(!m.imageUrl || m.content !== "Sent an image") && (
+                <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{m.content}</p>
+              )}
               <div className={`flex items-center gap-1 mt-1 ${m.sender === user?._id ? "justify-end" : ""}`}>
                 <span className={`text-[10px] ${m.sender === user?._id ? "text-primary-foreground/60" : "text-muted-foreground"}`}>{formatTime(m.createdAt)}</span>
                 {m.sender === user?._id && (
@@ -143,18 +266,52 @@ const Chat = () => {
             </div>
           </motion.div>
         ))}
+
+        {isOtherTyping && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-start"
+          >
+            <div className="bg-card shadow-card text-card-foreground rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1">
+              <span className="text-xs text-muted-foreground mr-1">{otherName} is typing</span>
+              <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></span>
+              <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></span>
+              <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></span>
+            </div>
+          </motion.div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
       <div className="sticky bottom-0 bg-card/90 backdrop-blur-md border-t border-border p-4">
         <div className="container mx-auto flex items-center gap-2">
-          <Button variant="ghost" size="icon"><Paperclip className="w-5 h-5" /></Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/*"
+            className="hidden"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleImageClick}
+            disabled={isUploading}
+          >
+            {isUploading ? (
+              <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            ) : (
+              <Paperclip className="w-5 h-5" />
+            )}
+          </Button>
           <Button variant="ghost" size="icon"><Smile className="w-5 h-5" /></Button>
           <Input
             placeholder="Type a message..."
             className="flex-1"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={e => handleInputChange(e.target.value)}
             onKeyDown={e => e.key === "Enter" && send()}
           />
           <Button variant="hero" size="icon" onClick={send} disabled={!input.trim()}>
@@ -167,3 +324,4 @@ const Chat = () => {
 };
 
 export default Chat;
+

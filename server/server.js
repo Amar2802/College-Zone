@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import messageRoutes from "./routes/messages.js";
+import eventRoutes from "./routes/events.js";
 
 dotenv.config();
 
@@ -43,6 +44,22 @@ io.on("connection", (socket) => {
     socket.emit("connected");
   });
 
+  socket.on("typing", (data) => {
+    const { senderId, receiverId } = data;
+    const receiverSocketId = userSockets[receiverId];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("typing", { senderId });
+    }
+  });
+
+  socket.on("stop_typing", (data) => {
+    const { senderId, receiverId } = data;
+    const receiverSocketId = userSockets[receiverId];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("stop_typing", { senderId });
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
     Object.keys(userSockets).forEach((userId) => {
@@ -64,6 +81,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/events", eventRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;

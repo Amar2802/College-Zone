@@ -58,6 +58,24 @@ router.get("/", protect, async (req, res) => {
   }
 });
 
+// Get study buddies (same college)
+router.get("/study-buddies", protect, async (req, res) => {
+  try {
+    const college = req.user.profile?.college;
+    if (!college) {
+      return res.status(400).json({ message: "Please complete your profile college details first" });
+    }
+    const users = await User.find({
+      _id: { $ne: req.user._id },
+      "profile.college": { $regex: new RegExp("^" + college.trim() + "$", "i") }
+    }).select("-password");
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Get specific user by ID
 router.get("/:userId", protect, async (req, res) => {
   try {
