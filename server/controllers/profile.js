@@ -77,18 +77,16 @@ export const calculateCompletion = (user) => {
 };
 
 // Check and mark profileCompleted: true if key information is done
-const checkProfileCompletion = async (user) => {
+const checkProfileCompletion = (user) => {
   const completion = calculateCompletion(user);
   
   // A profile is complete if it has: Basic Info (Name, College, Course, Year) & at least some preferences and about me details.
-  // We can also just base it on a threshold like completion >= 60%
   const hasBasicInfo = user.profile?.college && user.profile?.course && user.profile?.year && user.name;
   
   const originalStatus = user.profileCompleted;
   user.profileCompleted = !!(completion >= 50 && hasBasicInfo);
   
   if (originalStatus !== user.profileCompleted) {
-    await user.save();
     logger.info(`User ${user.email} profileCompleted status changed to: ${user.profileCompleted}`);
   }
   return user.profileCompleted;
@@ -150,8 +148,8 @@ export const updateProfile = async (req, res, next) => {
       user.socialLinks.portfolio = req.body.socialLinks.portfolio !== undefined ? req.body.socialLinks.portfolio : user.socialLinks.portfolio;
     }
 
+    checkProfileCompletion(user);
     await user.save();
-    await checkProfileCompletion(user);
 
     const completionPercentage = calculateCompletion(user);
     res.json({
@@ -198,8 +196,8 @@ export const updatePreferences = async (req, res, next) => {
       user.profile.smoking_drinking = `${smoking}/${drinking}`;
     }
 
+    checkProfileCompletion(user);
     await user.save();
-    await checkProfileCompletion(user);
 
     const completionPercentage = calculateCompletion(user);
     res.json({
@@ -308,8 +306,8 @@ export const uploadImage = async (req, res, next) => {
       user.coverImage = finalImageUrl;
     }
 
+    checkProfileCompletion(user);
     await user.save();
-    await checkProfileCompletion(user);
 
     const completionPercentage = calculateCompletion(user);
     res.json({

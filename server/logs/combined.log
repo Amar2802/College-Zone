@@ -293,3 +293,26 @@ Stack: Error: Not authorized, token verification failed
 [2026-06-15 21:48:44:4844] [INFO]: MongoDB Connected: 127.0.0.1
 [2026-06-15 21:48:44:4844] [INFO]: User registered: test@student.edu
 [2026-06-15 21:48:45:4845] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-15 21:50:48:5048] [INFO]: User logged in: devilamar44@gmail.com
+[2026-06-15 21:50:56:5056] [INFO]: Socket disconnected: nUh6giyuoMspbCaSAAAB
+[2026-06-15 21:50:56:5056] [INFO]: Removed socket mapping for user 6a2ea7de38cbbcee3f930bac
+[2026-06-15 21:51:00:510] [INFO]: Server running in development mode on port 5000
+[2026-06-15 21:51:00:510] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:28:54:2854] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:28:55:2855] [INFO]: User test@student.edu profileCompleted status changed to: true
+[2026-06-16 22:28:55:2855] [INFO]: User account deleted: test@student.edu
+[2026-06-16 22:28:55:2855] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:28:56:2856] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:28:56:2856] [INFO]: User registered: test@student.edu
+[2026-06-16 22:31:51:3151] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:31:51:3151] [INFO]: User test@student.edu profileCompleted status changed to: true
+[2026-06-16 22:31:51:3151] [INFO]: User account deleted: test@student.edu
+[2026-06-16 22:31:52:3152] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:31:52:3152] [INFO]: User registered: test@student.edu
+[2026-06-16 22:31:52:3152] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:34:28:3428] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:34:28:3428] [INFO]: User test@student.edu profileCompleted status changed to: true
+[2026-06-16 22:34:28:3428] [INFO]: User account deleted: test@student.edu
+[2026-06-16 22:34:29:3429] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:34:29:3429] [INFO]: User registered: test@student.edu
+[2026-06-16 22:34:30:3430] [INFO]: MongoDB Connected: 127.0.0.1

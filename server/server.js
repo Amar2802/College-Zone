@@ -1,8 +1,8 @@
+import "./utils/config.js";
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import connectDB from "./utils/db.js";
 import logger from "./utils/logger.js";
@@ -14,7 +14,6 @@ import messageRoutes from "./routes/messages.js";
 import eventRoutes from "./routes/events.js";
 import profileRoutes from "./routes/profile.js";
 
-dotenv.config();
 
 // Connect to MongoDB database
 connectDB();
@@ -53,8 +52,15 @@ app.use(express.json());
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 

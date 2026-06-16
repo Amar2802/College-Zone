@@ -22,7 +22,7 @@ const preferences = [
     label: "Cleanliness",
     field: "cleanliness",
     icon: Droplets,
-    options: ["Very Tidy", "Moderate", "Relaxed"],
+    options: ["Very Clean", "Moderate", "Relaxed"],
   },
   {
     label: "Study Habits",

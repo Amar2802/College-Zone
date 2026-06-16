@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: college_zone_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - college_zone_network
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: college_zone_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/college_zone
+      - JWT_SECRET=college_zone_secret_key_12345
+      - GOOGLE_CLIENT_ID=249630005104-8uadjumkulp6obogoehrgisj6jk7qchg.apps.googleusercontent.com
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - college_zone_network
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=http://localhost:5000
+        - REACT_APP_GOOGLE_CLIENT_ID=mock_google_client_id.apps.googleusercontent.com
+    container_name: college_zone_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - college_zone_network
+
+volumes:
+  mongo_data:
+
+networks:
+  college_zone_network:
+    driver: bridge
