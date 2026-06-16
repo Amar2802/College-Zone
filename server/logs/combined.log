@@ -316,3 +316,10 @@ Stack: Error: Not authorized, token verification failed
 [2026-06-16 22:34:29:3429] [INFO]: MongoDB Connected: 127.0.0.1
 [2026-06-16 22:34:29:3429] [INFO]: User registered: test@student.edu
 [2026-06-16 22:34:30:3430] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:42:10:4210] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:42:10:4210] [INFO]: MongoDB Connected: 127.0.0.1
+[2026-06-16 22:42:26:4226] [INFO]: Socket connected: blCI35SZCunea3sXAAAB
+[2026-06-16 22:42:26:4226] [INFO]: User 6a2ea7de38cbbcee3f930bac joined room and mapped to socket blCI35SZCunea3sXAAAB
+[2026-06-16 22:43:13:4313] [INFO]: User logged in: devilamar44@gmail.com
+[2026-06-16 22:43:24:4324] [INFO]: Socket disconnected: blCI35SZCunea3sXAAAB
+[2026-06-16 22:43:24:4324] [INFO]: Removed socket mapping for user 6a2ea7de38cbbcee3f930bac
