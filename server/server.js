@@ -1,4 +1,5 @@
 import "./utils/config.js";
+// Restarting node server for database validation
 import express from "express";
 import http from "http";
 import { Server } from "socket.io";
