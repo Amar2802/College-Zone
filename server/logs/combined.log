@@ -323,3 +323,27 @@ Stack: Error: Not authorized, token verification failed
 [2026-06-16 22:43:13:4313] [INFO]: User logged in: devilamar44@gmail.com
 [2026-06-16 22:43:24:4324] [INFO]: Socket disconnected: blCI35SZCunea3sXAAAB
 [2026-06-16 22:43:24:4324] [INFO]: Removed socket mapping for user 6a2ea7de38cbbcee3f930bac
+[2026-06-16 22:49:48:4948] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:49:48:4948] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:49:52:4952] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:49:52:4952] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:53:49:5349] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:53:49:5349] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:53:49:5349] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:53:49:5349] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:54:53:5453] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:54:53:5453] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:54:53:5453] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:54:53:5453] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:04:554] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:55:04:554] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:32:5532] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:55:32:5532] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:32:5532] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:55:32:5532] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:43:5543] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:55:43:5543] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:59:5559] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:55:59:5559] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:56:00:560] [INFO]: Server running in development mode on port 5000
+[2026-06-16 22:56:00:560] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net

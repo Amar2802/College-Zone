@@ -141,3 +141,15 @@ Stack: Error: Not authorized, token verification failed
     at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:970:7
     at processTicksAndRejections (node:internal/process/task_queues:104:5)
     at E:\CZ\College Zone\server\node_modules\express-rate-limit\dist\index.mjs:825:5
+[2026-06-16 22:49:48:4948] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:49:52:4952] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:53:49:5349] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:53:49:5349] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:54:53:5453] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:54:53:5453] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:04:554] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:32:5532] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:32:5532] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:43:5543] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:55:59:5559] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
+[2026-06-16 22:56:00:560] [ERROR]: Error connecting to MongoDB: querySrv ECONNREFUSED _mongodb._tcp.cluster0.vtht7mc.mongodb.net
